@@ -24,13 +24,13 @@ jobs:
       - name: Install dependencies
         run: |
           npm install
-          cd infrastructure && npm install
+           install
 
       - name: Build infrastructure code
-        run: cd infrastructure && npm run build
+        run: npm run build
 
       - name: Verify CDK infrastructure
-        run: cd infrastructure && npx cdk synth
+        run: npx cdk synth
         env:
           CDK_DEFAULT_ACCOUNT: '123456789012'  # Dummy account for synth
           CDK_DEFAULT_REGION: 'us-east-1'      # Dummy region for synth
