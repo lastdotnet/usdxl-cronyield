@@ -18,9 +18,6 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Build infrastructure code
-        run: npm run build
-
       - name: Verify CDK infrastructure
         run: npx cdk synth
         env:
