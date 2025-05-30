@@ -24,7 +24,7 @@ jobs:
       - name: Install dependencies
         run: |
           npm install
-           install
+          install
 
       - name: Build infrastructure code
         run: npm run build
