@@ -1,4 +1,4 @@
-name: Verify AWS Infrastructure
+name: Verify AWS Infra
 
 on:
   push:
