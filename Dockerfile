@@ -1,14 +1,28 @@
 # Use Ubuntu as base image
 FROM ubuntu:22.04
 
-# Install cron
-RUN apt-get update && apt-get install -y cron
+# Install required packages
+RUN apt-get update && apt-get install -y \
+    cron \
+    curl \
+    git \
+    build-essential \
+    libssl-dev \
+    pkg-config
+
+# Install Foundry
+RUN curl -L https://foundry.paradigm.xyz | bash
+ENV PATH="/root/.foundry/bin:${PATH}"
+RUN foundryup
 
 # Create the log file to be able to run tail
 RUN touch /var/log/cron.log
 
-# Copy the script
+# Copy the scripts and configuration
 COPY script.sh /usr/local/bin/script.sh
+COPY .env /usr/local/bin/.env
+
+# Make script executable
 RUN chmod +x /usr/local/bin/script.sh
 
 # Create the cron job
