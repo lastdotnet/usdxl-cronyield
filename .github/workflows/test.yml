@@ -16,15 +16,13 @@ jobs:
           node-version: '20'
 
       - name: Install dependencies
-        run: |
-          npm install
-          install
+        run: npm install
 
       - name: Build infrastructure code
-        run: npm run build
+        run: npm run build --prefix infrastructure
 
       - name: Verify CDK infrastructure
-        run: npx cdk synth
+        run: npx cdk synth --app "npx ts-node --prefer-ts-exts infrastructure/index.ts"
         env:
           CDK_DEFAULT_ACCOUNT: '123456789012'  # Dummy account for synth
           CDK_DEFAULT_REGION: 'us-east-1'      # Dummy region for synth
