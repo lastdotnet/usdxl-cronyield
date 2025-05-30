@@ -2,13 +2,7 @@ name: Verify AWS Infra
 
 on:
   push:
-    paths:
-      - 'infrastructure/**'
-      - 'package.json'
   pull_request:
-    paths:
-      - 'infrastructure/**'
-      - 'package.json'
 
 jobs:
   verify-infrastructure:
