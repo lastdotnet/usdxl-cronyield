@@ -35,9 +35,9 @@ echo "✓ Token decimals: $TOKEN_DECIMALS"
 # Calculate amount in smallest unit (wei)
 echo "Calculating amount in wei..."
 # Calculate 10^decimals
-DECIMAL_MULTIPLIER=$(echo "10^$TOKEN_DECIMALS" | bc)
+DECIMAL_MULTIPLIER=$(awk "BEGIN {print 10^$TOKEN_DECIMALS}")
 # Multiply token amount by decimal multiplier
-AMOUNT_WEI=$(echo "$TOKEN_AMOUNT * $DECIMAL_MULTIPLIER" | bc)
+AMOUNT_WEI=$(awk "BEGIN {printf \"%.0f\\n\", $TOKEN_AMOUNT * $DECIMAL_MULTIPLIER}")
 if [ -z "$AMOUNT_WEI" ]; then
     echo "Error: Could not calculate amount in wei"
     exit 1
