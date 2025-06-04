@@ -16,10 +16,11 @@ jobs:
           node-version: "20"
 
       - name: configure aws credentials
-        uses: aws-actions/configure-aws-credentials@master
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: arn:aws:iam::730335381248:role/github-actions
           aws-region: ap-northeast-1
+          role-session-name: GitHubActions
 
       - name: Install dependencies
         run: npm install
