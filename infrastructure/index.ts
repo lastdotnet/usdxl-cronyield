@@ -4,7 +4,7 @@ import { UsdxlCronyield } from "./cronyield";
 
 const app = new App();
 
-const cluster = new Cluster(app, "imported-usdxl-cronyield-cluster", {
+const cluster = new Cluster(app, "imported-hypurr-liquidator-cluster", {
   env: {
     account: process.env.CDK_DEFAULT_ACCOUNT,
     region: process.env.CDK_DEFAULT_REGION,

@@ -3,7 +3,7 @@ name: Deploy to Production
 on:
   push:
     branches:
-      - master
+      - main
   workflow_dispatch: {}
 
 permissions:
@@ -19,8 +19,6 @@ jobs:
   deploy_backend:
     name: Deploy | Backend
     uses: ./.github/workflows/workflow-deploy-backend.yaml
-    secrets:
-      GITHUB_TOKEN_ORG: ${{ secrets.PAT_TOKEN }}
     with:
       account: "730335381248"
       region: ap-northeast-1

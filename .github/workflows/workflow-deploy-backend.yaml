@@ -9,53 +9,33 @@ on:
       region:
         required: true
         type: string
-    secrets:
-      GITHUB_TOKEN_ORG:
-        required: true
 
 jobs:
   cluster:
     name: cluster
+    needs:
+      - network
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
-      - uses: actions/checkout@v4
-        with:
-          submodules: recursive
-          token: ${{ secrets.GITHUB_TOKEN_ORG }}
-
-      - name: Configure Git Access
-        run: |
-          git config --global url."https://${{ secrets.GITHUB_TOKEN_ORG }}@github.com/".insteadOf "https://github.com/"
-
+      - name: Checkout
+        uses: actions/checkout@v4
       - uses: ./.github/actions/deploy-cdk-stack
         with:
           account: ${{ inputs.account }}
           region: ${{ inputs.region }}
-          stacks: imported-usdxl-cronyield-cluster
+          stacks: imported-hypurr-liquidator-cluster
 
-  cronyield-backend:
+  cronyield:
     needs:
       - cluster
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
-      - uses: actions/checkout@v4
-        with:
-          submodules: recursive
-          token: ${{ secrets.GITHUB_TOKEN_ORG }}
-
-      - name: Configure Git Access
-        run: |
-          git config --global url."https://${{ secrets.GITHUB_TOKEN_ORG }}@github.com/".insteadOf "https://github.com/"
-
-      - name: Install Foundry
-        uses: foundry-rs/foundry-toolchain@v1
-        with:
-          version: stable
-
+      - name: Checkout
+        uses: actions/checkout@v2
       - uses: ./.github/actions/deploy-cdk-stack
         with:
           account: ${{ inputs.account }}
           region: ${{ inputs.region }}
-          stacks: hypurr-liquidator-frax
+          stacks: usdxl-cronyield
