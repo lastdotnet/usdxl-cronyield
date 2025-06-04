@@ -70,39 +70,50 @@ export class Backend extends Construct {
       ignoreMode: IgnoreMode.DOCKER,
     });
 
+    // Create task definition with proper roles
+    const taskDefinition = new ecs.FargateTaskDefinition(
+      this,
+      `${id}-task-def`,
+      {
+        memoryLimitMiB: 2048,
+        cpu: 1024,
+        taskRole: this.role,
+        executionRole: this.role,
+      }
+    );
+
+    // Add container to task definition
+    taskDefinition.addContainer(`${id}-container`, {
+      image: image,
+      memoryLimitMiB: 2048,
+      environment: {
+        ...props.containerEnvironment,
+        RPC_URL: "https://rpc.hyperliquid.xyz/evm",
+        TOKEN_AMOUNT: "100",
+        YIELD_TOKEN_ADDRESS: "0xca79db4B49f608eF54a5CB813FbEd3a6387bC645",
+        YIELD_RECIPIENT: "0x9992eD1214EA2bC91B0587b37C3E03D5e2a242C1",
+      },
+      secrets: {
+        PRIVATE_KEY: ecs.Secret.fromSecretsManager(
+          transmitterSecret,
+          "PRIVATE_KEY"
+        ),
+      },
+      command: ["/bin/bash", "-c", "chmod +x /app/script.sh && /app/script.sh"],
+      logging: ecs.LogDriver.awsLogs({
+        streamPrefix: "usdxl-cronyield-scheduled",
+        logRetention: logs.RetentionDays.ONE_WEEK,
+      }),
+      essential: true,
+    });
+
     // Create scheduled Fargate task that runs once per day
     this.scheduledTask = new ecsPatterns.ScheduledFargateTask(
       this,
       `${id}-scheduled-task`,
       {
         cluster: cluster,
-        scheduledFargateTaskImageOptions: {
-          image: image,
-          memoryLimitMiB: 2048,
-          cpu: 1024,
-          environment: {
-            ...props.containerEnvironment,
-            RPC_URL: "https://rpc.hyperliquid.xyz/evm",
-            TOKEN_AMOUNT: "100",
-            YIELD_TOKEN_ADDRESS: "0xca79db4B49f608eF54a5CB813FbEd3a6387bC645",
-            YIELD_RECIPIENT: "0x9992eD1214EA2bC91B0587b37C3E03D5e2a242C1",
-          },
-          secrets: {
-            PRIVATE_KEY: ecs.Secret.fromSecretsManager(
-              transmitterSecret,
-              "PRIVATE_KEY"
-            ),
-          },
-          command: [
-            "/bin/bash",
-            "-c",
-            "chmod +x /app/script.sh && /app/script.sh",
-          ],
-          logDriver: ecs.LogDriver.awsLogs({
-            streamPrefix: "usdxl-cronyield-scheduled",
-            logRetention: logs.RetentionDays.ONE_WEEK,
-          }),
-        },
+        taskDefinition: taskDefinition,
         // Run once per day at 12:00 UTC
         schedule: events.Schedule.cron({
           minute: "0",
@@ -116,12 +127,6 @@ export class Backend extends Construct {
         },
         securityGroups: [taskSecurityGroup],
         platformVersion: ecs.FargatePlatformVersion.LATEST,
-        taskDefinition: new ecs.FargateTaskDefinition(this, `${id}-task-def`, {
-          memoryLimitMiB: 2048,
-          cpu: 1024,
-          taskRole: this.role,
-          executionRole: this.role,
-        }),
       }
     );
   }
