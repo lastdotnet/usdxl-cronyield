@@ -119,7 +119,7 @@ export class Backend extends Construct {
         // Run once per day at 12:00 UTC
         schedule: events.Schedule.cron({
           minute: "55",
-          hour: "17",
+          hour: "07",
           day: "*",
           month: "*",
           year: "*",
