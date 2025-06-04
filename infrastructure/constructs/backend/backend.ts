@@ -48,9 +48,6 @@ export class Backend extends Construct {
         iam.ManagedPolicy.fromAwsManagedPolicyName(
           "service-role/AmazonECSTaskExecutionRolePolicy"
         ),
-        iam.ManagedPolicy.fromAwsManagedPolicyName(
-          "service-role/AmazonECSTaskRolePolicy"
-        ),
       ],
       inlinePolicies: {
         ...inlineRolePolicies,

@@ -18,8 +18,8 @@ jobs:
       - name: configure aws credentials
         uses: aws-actions/configure-aws-credentials@master
         with:
-          role-to-assume: arn:aws:iam::${{ inputs.account }}:role/github-actions
-          aws-region: ${{ inputs.region }}
+          role-to-assume: arn:aws:iam::730335381248:role/github-actions
+          aws-region: ap-northeast-1
 
       - name: Install dependencies
         run: npm install
