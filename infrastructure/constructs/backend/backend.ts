@@ -89,7 +89,7 @@ export class Backend extends Construct {
       environment: {
         ...props.containerEnvironment,
         RPC_URL: "https://rpc.hyperliquid.xyz/evm",
-        TOKEN_AMOUNT: "100",
+        TOKEN_AMOUNT: "1",
         YIELD_TOKEN_ADDRESS: "0xca79db4B49f608eF54a5CB813FbEd3a6387bC645",
         YIELD_RECIPIENT: "0x9992eD1214EA2bC91B0587b37C3E03D5e2a242C1",
       },
@@ -118,7 +118,7 @@ export class Backend extends Construct {
         },
         // Run once per day at 12:00 UTC
         schedule: events.Schedule.cron({
-          minute: "25",
+          minute: "50",
           hour: "17",
           day: "*",
           month: "*",
