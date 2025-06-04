@@ -34,7 +34,10 @@ echo "✓ Token decimals: $TOKEN_DECIMALS"
 
 # Calculate amount in smallest unit (wei)
 echo "Calculating amount in wei..."
-AMOUNT_WEI=$(cast to-uint256 $(cast --to-base $TOKEN_AMOUNT --decimals $TOKEN_DECIMALS) 2>/dev/null)
+# Calculate 10^decimals
+DECIMAL_MULTIPLIER=$(echo "10^$TOKEN_DECIMALS" | bc)
+# Multiply token amount by decimal multiplier
+AMOUNT_WEI=$(echo "$TOKEN_AMOUNT * $DECIMAL_MULTIPLIER" | bc)
 if [ -z "$AMOUNT_WEI" ]; then
     echo "Error: Could not calculate amount in wei"
     exit 1
