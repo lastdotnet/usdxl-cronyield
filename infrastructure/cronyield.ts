@@ -17,11 +17,10 @@ export class UsdxlCronyield extends cdk.Stack {
 
     const { cluster } = props;
 
-    new Backend(this, "hypurr-transmitter", {
+    new Backend(this, "usdxl-yield-scheduler", {
       cluster,
-      service: "transmitter",
+      service: "yield-transmitter",
       inlineRolePolicies: props.policies,
-      healthCheckPath: "/health",
       vpc: props.vpc,
     });
   }
