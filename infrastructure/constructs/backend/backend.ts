@@ -113,7 +113,9 @@ export class Backend extends Construct {
       `${id}-scheduled-task`,
       {
         cluster: cluster,
-        taskDefinition: taskDefinition,
+        scheduledFargateTaskDefinitionOptions: {
+          taskDefinition: taskDefinition,
+        },
         // Run once per day at 12:00 UTC
         schedule: events.Schedule.cron({
           minute: "0",
