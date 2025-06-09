@@ -30,8 +30,8 @@ export class Backend extends Construct {
 
     const transmitterSecret = secretsmanager.Secret.fromSecretNameV2(
       this,
-      "liquidator-secret",
-      "frax-liquidator/config"
+      "usdxl-cronyield-secret",
+      "usdxl-cronyield-secret"
     );
 
     // Create a security group for the scheduled task
