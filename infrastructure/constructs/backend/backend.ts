@@ -102,7 +102,6 @@ export class Backend extends Construct {
       command: ["/bin/bash", "-c", "chmod +x /app/script.sh && /app/script.sh"],
       logging: ecs.LogDriver.awsLogs({
         streamPrefix: "usdxl-cronyield-scheduled",
-        logRetention: logs.RetentionDays.ONE_WEEK,
         logGroup: new logs.LogGroup(this, `${id}-log-group`, {
           logGroupName: `/ecs/usdxl-cronyield-scheduled-${id}`,
           retention: logs.RetentionDays.ONE_WEEK,
