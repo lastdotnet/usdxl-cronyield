@@ -30,7 +30,7 @@ export class Backend extends Construct {
 
     const transmitterSecret = secretsmanager.Secret.fromSecretNameV2(
       this,
-      "usdxl-cronyield-secret",
+      "cronyield-secret",
       "usdxl-cronyield-secret"
     );
 
@@ -103,6 +103,12 @@ export class Backend extends Construct {
       logging: ecs.LogDriver.awsLogs({
         streamPrefix: "usdxl-cronyield-scheduled",
         logRetention: logs.RetentionDays.ONE_WEEK,
+        logGroup: new logs.LogGroup(this, `${id}-log-group`, {
+          logGroupName: `/ecs/usdxl-cronyield-scheduled-${id}`,
+          retention: logs.RetentionDays.ONE_WEEK,
+        }),
+        mode: ecs.AwsLogDriverMode.NON_BLOCKING,
+        datetimeFormat: "%Y-%m-%d %H:%M:%S",
       }),
       essential: true,
     });
