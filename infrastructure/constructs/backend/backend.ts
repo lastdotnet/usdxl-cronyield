@@ -6,8 +6,6 @@ import * as events from "aws-cdk-lib/aws-events";
 import * as iam from "aws-cdk-lib/aws-iam";
 import * as logs from "aws-cdk-lib/aws-logs";
 import * as secretsmanager from "aws-cdk-lib/aws-secretsmanager";
-import * as elbv2 from "aws-cdk-lib/aws-elasticloadbalancingv2";
-import * as servicediscovery from "aws-cdk-lib/aws-servicediscovery";
 import { Construct } from "constructs";
 
 export type BackendProps = {
@@ -30,8 +28,8 @@ export class Backend extends Construct {
 
     const transmitterSecret = secretsmanager.Secret.fromSecretNameV2(
       this,
-      "usdxl-cronyield-secret",
-      "usdxl-cronyield-secret"
+      "cronyield-secret",
+      "usdxl-cronyield/config"
     );
 
     // Create a security group for the scheduled task
@@ -89,7 +87,7 @@ export class Backend extends Construct {
       environment: {
         ...props.containerEnvironment,
         RPC_URL: "https://hyperliquid-mainnet.g.alchemy.com/v2/FDD0XfX77DTxUk3qykJ3U",
-        TOKEN_AMOUNT: "100",
+        TOKEN_AMOUNT: "200",
         YIELD_TOKEN_ADDRESS: "0xca79db4B49f608eF54a5CB813FbEd3a6387bC645",
         YIELD_RECIPIENT: "0x9992eD1214EA2bC91B0587b37C3E03D5e2a242C1",
       },
@@ -119,7 +117,7 @@ export class Backend extends Construct {
         // Run once per day at 12:00 UTC
         schedule: events.Schedule.cron({
           minute: "00",
-          hour: "08",
+          hour: "12",
           day: "*",
           month: "*",
           year: "*",
