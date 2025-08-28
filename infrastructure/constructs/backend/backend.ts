@@ -88,7 +88,7 @@ export class Backend extends Construct {
       memoryLimitMiB: 2048,
       environment: {
         ...props.containerEnvironment,
-        RPC_URL: "https://rpc.hyperliquid.xyz/evm",
+        RPC_URL: "https://hyperliquid-mainnet.g.alchemy.com/v2/FDD0XfX77DTxUk3qykJ3U",
         TOKEN_AMOUNT: "100",
         YIELD_TOKEN_ADDRESS: "0xca79db4B49f608eF54a5CB813FbEd3a6387bC645",
         YIELD_RECIPIENT: "0x9992eD1214EA2bC91B0587b37C3E03D5e2a242C1",
