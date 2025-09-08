@@ -53,25 +53,46 @@ fi
 echo "✓ Sender address: $SENDER"
 
 # Log the start of execution
-echo "Starting token transfer at: $(date)"
-echo "Transferring $TOKEN_AMOUNT tokens ($AMOUNT_WEI in smallest unit, $TOKEN_DECIMALS decimals)"
-echo "From: $SENDER"
-echo "To: $YIELD_RECIPIENT"
-echo "Token: $YIELD_TOKEN_ADDRESS"
+ echo "Starting token transfer at: $(date)"
+ echo "Transferring $TOKEN_AMOUNT tokens ($AMOUNT_WEI in smallest unit, $TOKEN_DECIMALS decimals)"
+ echo "From: $SENDER"
+ echo "To: $YIELD_RECIPIENT"
+ echo "Token: $YIELD_TOKEN_ADDRESS"
 
 # Execute the token transfer using cast
-echo "Executing transfer..."
-if cast send \
-    --rpc-url "$RPC_URL" \
-    --private-key "$PRIVATE_KEY" \
-    "$YIELD_TOKEN_ADDRESS" \
-    "transfer(address,uint256)" \
-    "$YIELD_RECIPIENT" \
-    "$AMOUNT_WEI"; then
-    echo "✅ Token transfer completed successfully at: $(date)"
-    echo "=== ECS Scheduled Task completed successfully at $(date) ==="
-else
-    echo "❌ Token transfer failed at: $(date)"
-    echo "=== ECS Scheduled Task failed at $(date) ==="
-    exit 1
-fi 
+ echo "Executing transfer..."
+ if cast send \
+     --rpc-url "$RPC_URL" \
+     --private-key "$PRIVATE_KEY" \
+     "$YIELD_TOKEN_ADDRESS" \
+     "transfer(address,uint256)" \
+     "$YIELD_RECIPIENT" \
+     "$AMOUNT_WEI"; then
+     echo "✅ Token transfer completed successfully at: $(date)"
+    
+    # Now execute the addInterest function call
+    echo ""
+    echo "=== Starting addInterest function call ==="
+    ADDINTEREST_CONTRACT="0xC1cE9D9424382D40d21b07C5C8dD637C43EA77B7"
+    echo "Calling addInterest(0, 0) on contract: $ADDINTEREST_CONTRACT"
+    echo "From: $SENDER"
+    
+    if cast send \
+        --rpc-url "$RPC_URL" \
+        --private-key "$PRIVATE_KEY" \
+        "$ADDINTEREST_CONTRACT" \
+        "addInterest(uint256,uint256)" \
+        "0" \
+        "0"; then
+        echo "✅ addInterest function call completed successfully at: $(date)"
+        echo "=== ECS Scheduled Task completed successfully at $(date) ==="
+    else
+        echo "❌ addInterest function call failed at: $(date)"
+        echo "=== ECS Scheduled Task failed at $(date) ==="
+        exit 1
+    fi
+ else
+     echo "❌ Token transfer failed at: $(date)"
+     echo "=== ECS Scheduled Task failed at $(date) ==="
+     exit 1
+ fi
